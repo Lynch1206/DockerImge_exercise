@@ -1,0 +1,14 @@
+name: myenv
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - pip
+  - pip:
+    - tensorflow
+    - keras
+    - jupyter
