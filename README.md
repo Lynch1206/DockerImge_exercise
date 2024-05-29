@@ -10,8 +10,9 @@ Build a docker image and deploy it to train an easy GAN model.
 
 
 ## What I have learned
-1. Build a Dockerfile script.
-2. Build docker image with `conda` environment and specify environment with `.yml` file.
+1. Build a [Dockerfile script](./Dockerfile).
+2. Build docker image with `conda` environment and specify environment with [`.yml` file](./environment.yml).
    - Activate the environment.
-3. Run the `train_gan.py` script with the environment.
+   - Build with [shell script](./build.sh).
+3. Run the [`train_gan.py`](./train_gan.py) script with the environment, invoking with [run.sh](./run.sh) script.
 4. Assign local path in train file and shell script.
