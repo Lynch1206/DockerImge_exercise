@@ -62,7 +62,6 @@ def train_gan(generator, discriminator, gan, epochs=10000, batch_size=64):
             accuracy.append(d_loss[1])
             train_g_loss.append(g_loss)
             epoch_.append(epoch)
-
     return train_d_loss, train_g_loss, accuracy, epoch_
 
 
@@ -91,7 +90,7 @@ gan.compile(loss='binary_crossentropy', optimizer='adam')
 
 # Train the GAN
 train_d_loss, train_g_loss, accuracy, epoch_ = train_gan(generator, discriminator, gan)
-
+print('Python version: ', sys.version)
 # plot training result
 plt.plot(epoch_, train_d_loss, label='Discriminator Loss')
 plt.plot(epoch_, train_g_loss, label='Generator Loss')
