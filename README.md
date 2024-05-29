@@ -9,7 +9,7 @@ Build a docker image and deploy it to train an easy GAN model.
 - [ ] User can export the training result to the local device.
 
 
-## What I have learned
+## Run down
 1. Build a [Dockerfile script](./Dockerfile).
 2. Build docker image with `conda` environment and specify environment with [`.yml` file](./environment.yml).
    - Activate the environment.
