@@ -1,10 +1,9 @@
 # DockerImage exercise
 I am a fresh new Docker learner.
 
-## Goal
+## Goal1
 Build a docker image and deploy it to train an easy GAN model. 
 > This exercise is not about how good the model is.
-
 - [ ] The purpose of the exercise is to build and deploy a docker image for python training.
 - [ ] User can export the training result to the local device.
 
@@ -16,3 +15,8 @@ Build a docker image and deploy it to train an easy GAN model.
    - Build with [shell script](./build.sh).
 3. Run the [`train_gan.py`](./train_gan.py) script with the environment, invoking with [run.sh](./run.sh) script.
 4. Assign local path in train file and shell script.
+
+## Goal2
+Interacting with sql database software. (see [folder](./Postergresql/document.md))
+- [ ] Parse data and save data in the container.
+- [ ] Export the container as a docker image.
