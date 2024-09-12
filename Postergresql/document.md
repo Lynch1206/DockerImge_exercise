@@ -3,7 +3,7 @@
 ## Establish the database
 
 ### Sqlite3
-Python 3 is already embedded with sqlite3. But I want to get familiar with postergresql more. <br/>
+Python 3 is already embedded with sqlite3. But I want to get familiar with postregresql more. <br/>
 Nevertheless, this time, I want to spend more time on the connections between modules instead of the SQL or parsing skills. Therefore, I use sqlite3 and parse data with `yfinance` to create a local database file, named: [`stock.db`](./stock.db). <br/>
 
 Parsing file and export local database script see [`sq3_stock.py`](./sq3_stock.py)
@@ -12,9 +12,9 @@ Parsing file and export local database script see [`sq3_stock.py`](./sq3_stock.p
 > In the future, I will try to create a notebook addresses using cloud SQL tool.
 
 ### docker
-The good thing about using Postergresql with docker is that we do not need to install the software locally.
+The good thing about using postregresql with docker is that we do not need to install the software locally.
 
-- Approach Postergresql with docker
+- Approach postregresql with docker
 `docker run --name MyPostgres -d -p 5432:5432 -v ~/Postgres:/var/lib/postgresql/data -e POSTGRES_DB=eflab -e POSTGRES_USER=admin -e POSTGRES_PASSWORD='12345' postgres:latest`
 
 > 使用 docker run 由 image 建立 container，當 Docker 發現本機沒有 image，會自動從 Docker Hub 下載。
@@ -41,7 +41,7 @@ docker run --name MyPostgres -d -p 5432:5432 -v ~/Postgres:/var/lib/postgresql/d
 docker run --name pg-container -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres
 ```
 
-Use `pgloader` for loading a local database file for the postergresql container.
+Use `pgloader` for loading a local database file for the postregresql container.
 
 `brew install pgloader`
 
@@ -50,12 +50,12 @@ Use pgloader to migrate the data, the `path/to` should be modified.
 pgloader sqlite://path/to/stock.db postgresql://myuser:mypassword@localhost:5432/mydatabase
 ```
 
-## 用sqlite3 製作資料然後用python3去寫入 postergresql docker
+## 用sqlite3 製作資料然後用python3去寫入 postregresql docker
 All operations see in script, [writedb2postdocker.py](./writedb2postdocker.py)
 ### sqlite 3 create table
 In this part, I use yfinance to prase stock data and write a database file locally. (reference script [file](sq3_stock.py))
 
-### Pull the postergresql docker and run as container
+### Pull the postregresql docker and run as container
 
 Reference the previous section (see docker)
 
@@ -72,7 +72,7 @@ sqlite_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
 ```
 
 
-I use `psycopg2` to establish link to postergresql container.
+I use `psycopg2` to establish link to postregresql container.
 And write the container with `SQLAlchemy` engine. <br/>
 It seems like `psycopg2` is a good connector, however, `SQLAlchemy` is a better writer to interact with SQL software.
 
@@ -167,4 +167,73 @@ To load docker image.
 
 ```bash
 docker load -i mypostgresql-image.tar
+```
+
+# Interactions in the postregresql docker terminal
+
+If all actions above had been done, then it is useful to learn basic operations of interacting with postgreSQL container. <br/>
+The new docker UI is quite easy. 
+![Docker UI interactions](docker_UI.png)
+
+## Docker container and postgresql
+
+Command helper:
+```bash
+psql --help
+```
+PostgreSQL interactive terminal. <br/>
+To access the postgresql in the container:
+```bash
+psql -U username -d mydatabsename
+```
+Check version
+```bash
+psql -V
+```
+`SHOW DATABASE` list all dtabase:
+```bash
+\l
+```
+To access any specific database:
+```bash
+\c mydatabase
+```
+
+In the any specific database, to list all tables:
+```bash
+\dt
+```
+
+Result:
+```bash
+root@59a2c8d30e8c:/# psql -U myuser -d mydatabase
+psql (16.4 (Debian 16.4-1.pgdg120+1))
+Type "help" for help.
+
+mydatabase=# \l
+                                                    List of databases
+    Name    | Owner  | Encoding | Locale Provider |  Collate   |   Ctype    | ICU Locale | ICU Rules | Access privileges
+------------+--------+----------+-----------------+------------+------------+------------+-----------+-------------------
+ mydatabase | myuser | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           |
+ postgres   | myuser | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           |
+
+mydatabase=# \c mydatabase
+You are now connected to database "mydatabase" as user "myuser".
+mydatabase=# \dt
+        List of relations
+ Schema |  Name  | Type  | Owner
+--------+--------+-------+--------
+ public | prices | table | myuser
+ public | volume | table | myuser
+(2 rows)
+
+mydatabase=# SELECT * FROM prices LIMIT 5;
+    Date    | ticker |       price
+------------+--------+--------------------
+ 1546358400 | EQIX   | 315.50689697265625
+ 1546444800 | EQIX   |  311.8470764160156
+ 1546531200 | EQIX   |  318.9234313964844
+ 1546790400 | EQIX   |  319.5635070800781
+ 1546876800 | EQIX   |  326.1980895996094
+(5 rows)
 ```
